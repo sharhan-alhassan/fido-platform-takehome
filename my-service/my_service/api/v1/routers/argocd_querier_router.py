@@ -33,9 +33,6 @@ async def application_status(token: str = Depends(get_token)):
     # Please complete the fastapi route to get applications metadata from argocd #
     # Make sure to use argocd token for authentication                           #  
     ##############################################################################
-    
-    # async with ArgoClient(server=settings.ARGOCD_URL, token=token) as client:
-    #     return await client.get_apps(project="default")
 
     async with ArgoClient(server=settings.ARGOCD_URL, token=token) as client:
         apps = await client.get_apps(project="default")

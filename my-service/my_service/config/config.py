@@ -15,12 +15,11 @@ class Settings(BaseSettings):
     ENV: str = os.getenv("ENV", "local")
     ARGOCD_SERVER: str = os.getenv("ARGOCD_SERVER", "localhost")
     ARGOCD_PORT: str = os.getenv("ARGOCD_PORT", 443)
-    # ARGOCD_URL: str = os.getenv("ARGOCD_URL", "")
     ARGOCD_URL_LOCAL: str = os.getenv("ARGOCD_URL_LOCAL", "localhost:4040")
     ARGOCD_URL_PROD: str = os.getenv("ARGOCD_URL_PROD", "argocd-server.argocd.svc.cluster.local:443")
     ARGOCD_URL: str = ARGOCD_URL_PROD if ENV == "production" else ARGOCD_URL_LOCAL
     ARGOCD_PASSWORD: str = os.getenv("ARGOCD_PASSWORD", "")
-    ARGOCD_USERNAME: str = os.getenv("ARGOCD_USERNAME", "admin")                            # default argocd user
+    ARGOCD_USERNAME: str = os.getenv("ARGOCD_USERNAME", "admin")                   
     TOKEN_CACHE_TTL: int = os.getenv("TOKEN_CACHE_TTL", 600) 
 
     model_config = SettingsConfigDict(env_nested_delimiter='__')
