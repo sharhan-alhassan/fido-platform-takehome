@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from my_service.dependencies import get_token
+from my_service.models.models import ApplicationsResponse, ProjectsResponse
 from my_service.utils.logger import setup_logger
 from fastapi import APIRouter
 from my_service.argocd_client import ArgoClient
@@ -17,7 +18,7 @@ logger = setup_logger()
 app = FastAPI()
 
 
-@router.get("/application_status")
+@router.get("/application_status", response_model=ApplicationsResponse)
 async def application_status(token: str = Depends(get_token)):
     """Fetches all ArgoCD applications statuses
 
@@ -46,7 +47,7 @@ async def application_status(token: str = Depends(get_token)):
         return formatted_apps
 
 
-@router.get("/list_projects")
+@router.get("/list_projects", response_model=ProjectsResponse)
 async def list_projects(token: str = Depends(get_token)):
     """Fetches all argocd projects names and namespaces to which they are configured
 
