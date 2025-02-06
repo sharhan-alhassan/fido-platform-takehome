@@ -1,7 +1,10 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 from pydantic import AnyHttpUrl
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class Settings(BaseSettings):
     BACKEND_ORIGINS: List[AnyHttpUrl] = []
@@ -9,12 +12,12 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "DEBUG"
 
     # ArgoCD Config defaults
-    ARGOCD_SERVER: str = "localhost"
-    ARGOCD_PORT: str = "<ARGOCD_PORT>"
-    ARGOCD_URL: str = f"{ARGOCD_SERVER}:{ARGOCD_PORT}"
-    ARGOCD_PASSWORD: str = "<ARGOCD_ADMIN_USER_PASSWORD>"
-    ARGOCD_USERNAME: str = "admin"                              # default argocd user
-    TOKEN_CACHE_TTL: int = 600
+    ARGOCD_SERVER: str = os.getenv("ARGOCD_SERVER", "localhost")
+    ARGOCD_PORT: str = os.getenv("ARGOCD_PORT", 443)
+    ARGOCD_URL: str = os.getenv("ARGOCD_URL", "localhost:4040")
+    ARGOCD_PASSWORD: str = os.getenv("ARGOCD_PASSWORD", "")
+    ARGOCD_USERNAME: str = os.getenv("ARGOCD_USERNAME", "admin")                            # default argocd user
+    TOKEN_CACHE_TTL: int = os.getenv("TOKEN_CACHE_TTL", 600) 
 
     model_config = SettingsConfigDict(env_nested_delimiter='__')
 

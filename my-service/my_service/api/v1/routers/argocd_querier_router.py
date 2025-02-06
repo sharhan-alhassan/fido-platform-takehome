@@ -1,9 +1,10 @@
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from my_service.dependencies import get_token
 from my_service.utils.logger import setup_logger
 from fastapi import APIRouter
-
+from my_service.argocd_client import ArgoClient
+from my_service.config.config import settings
 
 router = APIRouter(
     prefix="/arogocd",
@@ -32,8 +33,23 @@ async def application_status(token: str = Depends(get_token)):
     # Please complete the fastapi route to get applications metadata from argocd #
     # Make sure to use argocd token for authentication                           #  
     ##############################################################################
-    pass
+    
+    # async with ArgoClient(server=settings.ARGOCD_URL, token=token) as client:
+    #     return await client.get_apps(project="default")
 
+    async with ArgoClient(server=settings.ARGOCD_URL, token=token) as client:
+        apps = await client.get_apps(project="default")
+        # Format the response according to the specified structure
+        formatted_apps = {
+            "applications": [
+                {
+                    "application_name": app["metadata"]["name"],
+                    "status": app["status"]["sync"]["status"]
+                }
+                for app in apps
+            ]
+        }
+        return formatted_apps
 
 @router.get("/list_projects")
 async def list_projects(token: str = Depends(get_token)):
@@ -50,4 +66,15 @@ async def list_projects(token: str = Depends(get_token)):
     # Make sure to use argocd token for authentication                       #  
     ##########################################################################
 
-    pass
+    async with ArgoClient(server=settings.ARGOCD_URL, token=token) as client:
+        projects = await client.list_projects()
+        formatted_projects = {
+            "projects": [
+                {
+                    "project_name": project.get("metadata", {}).get("name", ""),
+                    "namespace": project.get("spec", {}).get("destinations", [{}])[0].get("namespace", "default")
+                }
+                for project in projects
+            ]
+        }
+        return formatted_projects
