@@ -4,11 +4,15 @@ from my_service.utils.logger import setup_logger
 
 logger = setup_logger()
 
+
 class ArgoInteractionError(Exception):
     """Any error in interacting with ArgoCD"""
+
     pass
 
+
 AppUrl = namedtuple("AppUrl", ["name", "url"])
+
 
 class ArgoClient:
     """Simple wrapper class to serve as ArgoCD client"""
@@ -31,16 +35,18 @@ class ArgoClient:
         """Generic request method with error handling."""
         url = f"https://{self.server}/api/v1/{endpoint}"
         logger.debug(f"Making request to ArgoCD: {method} {url}")
-        
-        headers = kwargs.pop('headers', {})
-        headers['Authorization'] = f'Bearer {self.token}'
-        kwargs['headers'] = headers
-        
+
+        headers = kwargs.pop("headers", {})
+        headers["Authorization"] = f"Bearer {self.token}"
+        kwargs["headers"] = headers
+
         if self.session is None:
             self.session = aiohttp.ClientSession()
 
         try:
-            async with self.session.request(method, url, *args, ssl=False, **kwargs) as response:
+            async with self.session.request(
+                method, url, *args, ssl=False, **kwargs
+            ) as response:
                 logger.debug(f"Response status code: {response.status}")
                 response.raise_for_status()
                 return await response.json()
@@ -84,19 +90,18 @@ class ArgoClient:
         """Delete an app"""
         response = await self.delete(f"applications/{name}")
         return response
-    
-    
+
     async def list_projects(self) -> list:
         """
         List all ArgoCD projects.
-        
+
         Returns:
             list: A list of project objects containing metadata and specifications
         """
         try:
             response = await self.get("projects")
-            if isinstance(response, dict) and 'items' in response:
-                return response['items']
+            if isinstance(response, dict) and "items" in response:
+                return response["items"]
             return []
         except Exception as e:
             logger.error(f"Error listing ArgoCD projects: {str(e)}")

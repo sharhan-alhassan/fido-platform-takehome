@@ -12,13 +12,13 @@ logger.debug(f"Running with config: {settings}")
 
 
 def get_applcation():
-    _app = FastAPI(title=settings.FASTAPI_PROJECT_NAME)  
+    _app = FastAPI(title=settings.FASTAPI_PROJECT_NAME)
     _app.add_middleware(
         CORSMiddleware,
         allow_origins=[str(origin) for origin in settings.BACKEND_ORIGINS],
         allow_credentials=True,
         allow_methods=["*"],
-        allow_headers=["*"]
+        allow_headers=["*"],
     )
     return _app
 
@@ -31,8 +31,7 @@ app.include_router(api.router)
 async def healthcheck() -> HealthCheckResponse:
     logger.debug("healthcheck hit")
     return HealthCheckResponse(
-        status_code=status.HTTP_200_OK,
-        message="Server is runing!"
+        status_code=status.HTTP_200_OK, message="Server is runing!"
     )
 
 

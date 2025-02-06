@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: my-service
-          # image: my-registry.local:5000/fido-app:0.0.1
-          image: sharhanalhassan/fido-app:0.0.2
+          image: my-registry.local:5000/fido-app:0.0.1
+          # image: sharhanalhassan/fido-app:0.0.2
           envFrom:
             - configMapRef:
                 name: my-service-config
