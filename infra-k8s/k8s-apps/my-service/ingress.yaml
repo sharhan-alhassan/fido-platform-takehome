@@ -16,4 +16,4 @@ spec:
               service:
                 name: my-service
                 port:
-                  number: 6001
+                  number: 80

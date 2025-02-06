@@ -95,7 +95,6 @@ class ArgoClient:
         """
         try:
             response = await self.get("projects")
-            # The response should contain an 'items' key with the list of projects
             if isinstance(response, dict) and 'items' in response:
                 return response['items']
             return []
