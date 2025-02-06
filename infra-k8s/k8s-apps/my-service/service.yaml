@@ -6,6 +6,6 @@ metadata:
 spec:
   ports:
   - port: 80
-    targetPort: 6001
+    targetPort: 80
   selector:
     app: my-service
