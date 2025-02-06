@@ -14,7 +14,13 @@ spec:
         app: my-service
     spec:
       containers:
-      - name: my-service
-        image: my-service:1.0
-        ports:
-        - containerPort: 80
+        - name: my-service
+          # image: my-registry.local:5000/fido-app:0.0.1
+          image: sharhanalhassan/fido-app:0.0.2
+          envFrom:
+            - configMapRef:
+                name: my-service-config
+            - secretRef:
+                name: my-service-secrets
+          ports:
+            - containerPort: 80
