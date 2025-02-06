@@ -10,5 +10,4 @@ data:
   ARGOCD_URL_PROD: "http://argocd-server.argocd.svc.cluster.local:80"
   ARGOCD_URL_LOCAL: "localhost:4040"
   ARGOCD_URL: "localhost:4040"
-  ARGOCD_URL: "localhost:4040"
   TOKEN_CACHE_TTL: "600"
